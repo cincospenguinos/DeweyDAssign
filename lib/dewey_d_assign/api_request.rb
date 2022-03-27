@@ -58,9 +58,10 @@ class DeweyDAssign::ApiRequest
 	attr_accessor :order_by
 
 	def initialize(opts = {})
+		@summary = opts[:summary].nil? ? true : opts[:summary]
 	end
 
 	def to_s
-		API_ENDPOINT
+		"#{API_ENDPOINT}?summary=#{@summary}"
 	end
 end
