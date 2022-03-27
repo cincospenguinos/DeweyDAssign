@@ -18,4 +18,8 @@ class ApiRequestTest < Minitest::Test
   def test_does_not_have_stdnbr_where_none_given
     refute DeweyDAssign::ApiRequest.new.to_s.include?('stdnbr')
   end
+
+  def test_does_not_end_with_ampersand
+    refute DeweyDAssign::ApiRequest.new.to_s.end_with?('&')
+  end
 end
