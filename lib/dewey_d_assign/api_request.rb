@@ -48,12 +48,26 @@ class DeweyDAssign::ApiRequest
 	def initialize(opts = {})
 		@summary = opts[:summary].nil? ? true : opts[:summary]
 		@stdnbr = opts[:stdnbr]
+		@oclc = opts[:oclc]
+		@isbn = opts[:isbn]
+		@issn = opts[:issn]
+		@upc = opts[:upc]
+		@ident = opts[:ident]
+		@heading = opts[:heading]
+		@owi = opts[:owi]
+		@author = opts[:author]
+		@title = opts[:title]
+		@max_recs = opts[:max_recs]
+		@order_by = opts[:order_by]
 	end
 
 	def to_s
 		req = "#{API_ENDPOINT}?"
 		req_params.each do |attr, value|
-			req = "#{req}#{attr}=#{value}&"
+			true_attr = attr.to_s.split('_')
+				.inject([]) { |buffer,e| buffer.push(buffer.empty? ? e : e.capitalize) }
+				.join
+			req = "#{req}#{true_attr}=#{value}&"
 		end
 
 		req[0...-1]

@@ -22,4 +22,8 @@ class ApiRequestTest < Minitest::Test
   def test_does_not_end_with_ampersand
     refute DeweyDAssign::ApiRequest.new.to_s.end_with?('&')
   end
+
+  def test_handles_max_recs
+    assert DeweyDAssign::ApiRequest.new(max_recs: 'bar').to_s.include?('maxRecs=bar')
+  end
 end
