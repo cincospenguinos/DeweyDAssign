@@ -42,26 +42,29 @@
 #  	-- type desc (FAST subject type, descending)
 class DeweyDAssign::ApiRequest
 	API_ENDPOINT = 'http://classify.oclc.org/classify2/Classify'
-
-	attr_accessor :stdnbr
-	attr_accessor :oclc
-	attr_accessor :isbn
-	attr_accessor :issn
-	attr_accessor :upc
-	attr_accessor :ident
-	attr_accessor :heading
-	attr_accessor :owi
-	attr_accessor :author
-	attr_accessor :title
-	attr_accessor :summary
-	attr_accessor :max_recs
-	attr_accessor :order_by
+	ATTRS = %i(stdnbr oclc isbn issn upc ident heading owi author title summary max_recs order_by)
+	attr_accessor(*ATTRS)
 
 	def initialize(opts = {})
 		@summary = opts[:summary].nil? ? true : opts[:summary]
+		@stdnbr = opts[:stdnbr]
 	end
 
 	def to_s
-		"#{API_ENDPOINT}?summary=#{@summary}"
+		req = "#{API_ENDPOINT}?"
+		req_params.each do |attr, value|
+			req = "#{req}#{attr}=#{value}&"
+		end
+
+		req[0...-1]
+	end
+
+	private
+
+	def req_params
+		params = {}
+		ATTRS.select { |attr| !self.send(attr).nil? }
+			.map { |attr| params[attr] = self.send(attr).to_s }
+		params
 	end
 end
