@@ -1,12 +1,18 @@
 PATH
   remote: .
   specs:
-    dewey_d_assign (0.1.0)
+    dewey_d_assign (0.0.1)
+      nokogiri (~> 1.13)
 
 GEM
   remote: https://rubygems.org/
   specs:
+    mini_portile2 (2.8.0)
     minitest (5.15.0)
+    nokogiri (1.13.3)
+      mini_portile2 (~> 2.8.0)
+      racc (~> 1.4)
+    racc (1.6.0)
     rake (10.5.0)
 
 PLATFORMS

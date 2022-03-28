@@ -26,6 +26,10 @@ class DeweyDAssign::ApiRequest
 		@order_by = opts[:order_by]
 	end
 
+	def uri
+		URI.parse(to_s)
+	end
+
 	def to_s
 		req = "#{API_ENDPOINT}?"
 		req_params.each { |attr_name, value| req = "#{req}#{param_for(attr_name, value)}&" }
