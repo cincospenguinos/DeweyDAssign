@@ -1,0 +1,51 @@
+#!/usr/bin/env ruby
+require 'thor'
+require 'bundler/setup'
+require 'dewey_d_assign'
+
+class DeweyDAssignCLI < Thor
+	ASSIGN_LONG_DESC = <<~assign
+		Prints the dewey decimal number corresponding to the information provided out to STDOUT. One or more of the
+		following options must be provided:
+
+		  owi      - OWI number to search\n
+		  stdnbr   - A standard number (OCLC, ISBN, ISSN, UPC)\n
+		  oclc     - The OCLC number to search for\n
+		  issn     - The ISSN number to search for\n
+		  upc      - UPC code to search\n
+		  ident    - The FAST identifier to search\n
+		  heading  - The FAST heading to search\n
+		  author   - Name of the author\n
+		  title    - Title of the work\n
+	assign
+
+	desc 'assign [opts]', 'Assign a dewey decimal number according to the options provided'
+	long_desc ASSIGN_LONG_DESC
+	option :owi
+	option :stdnbr
+	option :oclc
+	option :issn
+	option :upc
+	option :ident
+	option :heading
+	option :author
+	option :title
+	def assign
+		if options.keys.size == 0
+			puts 'One or more option required'
+			return 1
+		end
+		
+		req = DeweyDAssign::ApiRequest.new(options)
+		response = DeweyDAssign::ApiResponse.submit_request(req)
+		if response.has_number?
+			puts response.nsfa
+			return 0
+		end
+
+		puts "No number found! #{response.xml.to_s}"
+		return 1
+	end
+end
+
+DeweyDAssignCLI.start(ARGV)
